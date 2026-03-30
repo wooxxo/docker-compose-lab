@@ -157,9 +157,27 @@ docker ps
 
 ## ✅ 검증 결과
 
+### 초기 실행
+
+`docker compose up -d` 직후 — DB가 `healthy`가 된 직후 App이 `starting` 상태로 진입하는 것을 확인.
+
+![초기 실행](/Images/docker-1.png)
+
+> DB(8초 업)가 healthy 판정된 직후 App(2초 업)이 시작됨 — `depends_on: service_healthy` 동작 증거
+
+---
+
+### healthy 안정화
+
+약 1분 후 — DB, App 모두 `healthy` 상태로 전환 완료.
+
+![healthy 안정화](/Images/docker-2.png)
+
+---
+
 | 테스트 시나리오 | 예상 결과 | 실제 확인 사항 |
 |---|---|---|
-| 초기 실행 | DB `healthy` 후 App 시작 | DB `healthy` 판정 직후 App `Up` 확인 |
+| 초기 실행 | DB `healthy` 후 App 시작 | DB `healthy` 판정 직후 App `Up` 확인 *(위 스크린샷)* |
 | 포트 충돌 | `address already in use` 에러 | 3306 포트 점유 프로세스 종료 후 정상 가동 |
 | DB 강제 종료 | App 유지, DB 연결 실패 | App 컨테이너 생존, API 호출 시 에러 응답 확인 |
 | DB 재시작 | 서비스 자동 복구 | DB 재가동 후 App `healthy` 복구 확인 |
